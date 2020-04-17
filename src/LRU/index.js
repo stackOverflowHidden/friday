@@ -1,5 +1,19 @@
+import { sizeof } from '../../common/utils';
+
+function getCacheSize(cache, queue) {
+  const bytes = 0;
+
+  bytes += sizeof(queue);
+  cache.forEach((value, key) => {
+    bytes += sizeof(value);
+    bytes += sizeof(key);
+  });
+
+  return bytes;
+}
+
 class LRU {
-  size = 100;
+  size = 1000;
   timeout = 10000;
   hasSetUp = false;
   cache = new Map();
@@ -29,7 +43,8 @@ class LRU {
     if (!this.hasSetUp) this.hasSetUp = true;
 
     if (!this.cache.has(key)) {
-      if (this.queue.length < this.size) {
+      const cacheSize = getCacheSize(this.cache, this.queue);
+      if (cacheSize < this.size) {
         this.queue.push({
           key: key,
           value: value,
