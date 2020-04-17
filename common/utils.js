@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-04-17 14:45:06
- * @LastEditTime: 2020-04-17 16:23:10
+ * @LastEditTime: 2020-04-17 16:40:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /friday/common/utils.js
@@ -23,7 +23,8 @@ export function sizeof(obj) {
     case "number":
       return ECMA_SIZES.NUMBER;
     case "symbol":
-      return;
+      const isGlobalSymbol = Symbol.keyFor && Symbol.keyFor(obj);
+      return isGlobalSymbol ? Symbol.keyFor(obj).length * ECMA_SIZES.STRING : (obj.toString().length - 8) * ECMA_SIZES.STRING;
     case "object":
       if (Array.isArray(obj)) {
         return obj.map((item) => sizeof(item)).reduce((acc, curr) => acc + curr);
