@@ -6,6 +6,7 @@ class LRU {
   queue = [];
   timer = {}; // 定时器，过期删除数据
 
+  // 读取缓存数据
   get = (key) => {
     if (!this.hasSetUp) this.hasSetUp = true;
 
@@ -22,6 +23,7 @@ class LRU {
     }
   }
 
+  //写入缓存数据
   put = (key, value) => {
     if (!key || !value) return null;
     if (!this.hasSetUp) this.hasSetUp = true;
@@ -37,7 +39,7 @@ class LRU {
           index: this.queue.length - 1, // 当前数据在队列中的索引
         });
 
-        this.timer[key] = setTimeout(() => this.willDeleteData(key), this.timeout);
+        this.timer[key] = setTimeout(() => this.willDeleteData(key, this.queue, this.cache), this.timeout);
       } else {
         const deletedItem = this.queue.shift();
         clearTimeout(this.timer[deletedItem.key]);
@@ -58,7 +60,7 @@ class LRU {
           index: this.queue.length - 1,
         });
 
-        this.timer[key] = setTimeout(() => this.willDeleteData(key), this.timeout);
+        this.timer[key] = setTimeout(() => this.willDeleteData(key, this.queue, this.cache), this.timeout);
       }
     } else {
       clearTimeout(this.timer[key]);
@@ -81,10 +83,11 @@ class LRU {
         }
       });
 
-      this.timer[key] = setTimeout(() => this.willDeleteData(key), this.timeout);
+      this.timer[key] = setTimeout(() => this.willDeleteData(key, this.queue, this.cache), this.timeout);
     }
   }
 
+  // 设置缓存大小
   setSize = (size) => {
     if (this.hasSetUp) return null;
 
@@ -100,9 +103,9 @@ class LRU {
     this.hasSetUp = true;
   }
 
-  willDeleteData = (key) => {
+  static willDeleteData = (key, queue, cache) => {
     let index = -1;
-    this.queue.forEach((item, i) => {
+    queue.forEach((item, i) => {
       if (item.key === key) {
         index = i;
       }
@@ -110,11 +113,11 @@ class LRU {
 
     if (index < 0) return;
 
-    this.queue.splice(index, 1);
-    this.cache.delete(key);
-    this.cache.forEach((itemValue, itemKey) => {
+    queue.splice(index, 1);
+    cache.delete(key);
+    cache.forEach((itemValue, itemKey) => {
       if (itemValue.index > index) {
-        this.cache.set(itemKey, {
+        cache.set(itemKey, {
           value: itemValue.value,
           index: itemValue.index - 1,
         });
