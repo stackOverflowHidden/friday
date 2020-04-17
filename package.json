@@ -1,0 +1,22 @@
+{
+  "name": "friday",
+  "version": "1.0.0",
+  "description": "周五作业",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackOverflowHidden/friday.git"
+  },
+  "keywords": [
+    "homework"
+  ],
+  "author": "stackOverflowHidden",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stackOverflowHidden/friday/issues"
+  },
+  "homepage": "https://github.com/stackOverflowHidden/friday#readme"
+}
